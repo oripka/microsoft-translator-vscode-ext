@@ -5,6 +5,7 @@ const request = require("request");
 var selections;
 var subscriptionKey;
 var appendText;
+var fixToBackticks;
 function activate(context) {
     context.subscriptions.push(vscode.commands.registerCommand('extension.translate1', () => {
         let lang = vscode.workspace.getConfiguration('microsoftTranslatorExt')['firstLanguage'];
@@ -34,6 +35,7 @@ function onActivate(lang) {
 function init() {
     subscriptionKey = vscode.workspace.getConfiguration('microsoftTranslatorExt')['apiKey'];
     appendText = vscode.workspace.getConfiguration('microsoftTranslatorExt')['appendText'];
+    fixToBackticks = vscode.workspace.getConfiguration('microsoftTranslatorExt')['fixToBackticks'];
     selections = vscode.window.activeTextEditor.selections;
 }
 function translateSelection(selection, lang) {
@@ -57,6 +59,9 @@ function translateSelection(selection, lang) {
             let lang = res[0].translations[0].to;
             let editor = vscode.window.activeTextEditor;
             //vscode.window.showInformationMessage(text);
+            if (fixToBackticks) {
+                text = text.replace("'", "`");
+            }
             editor.edit((editBuilder) => {
                 if (appendText) {
                     //console.log('appended');

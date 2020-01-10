@@ -6,6 +6,7 @@ import * as request from 'request';
 var selections: vscode.Selection[];
 var subscriptionKey: any;
 var appendText: boolean;
+var fixToBackticks: boolean;
 
 export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerCommand('extension.translate1', () => {
@@ -39,6 +40,7 @@ function onActivate(lang: string): void {
 function init(): void {
 	subscriptionKey = vscode.workspace.getConfiguration('microsoftTranslatorExt')['apiKey'];
 	appendText = vscode.workspace.getConfiguration('microsoftTranslatorExt')['appendText'];
+	fixToBackticks = vscode.workspace.getConfiguration('microsoftTranslatorExt')['fixToBackticks'];
 	selections = vscode.window.activeTextEditor.selections;
 }
 
@@ -66,6 +68,10 @@ function translateSelection(selection: any, lang: string) {
 			let editor = vscode.window.activeTextEditor;
 
 			//vscode.window.showInformationMessage(text);
+
+			if(fixToBackticks){
+				text = text.replace("'", "`");
+			}
 
 			editor.edit((editBuilder) => {
 				if (appendText) {
