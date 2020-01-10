@@ -70,7 +70,7 @@ function translateSelection(selection: any, lang: string) {
 			//vscode.window.showInformationMessage(text);
 
 			if(fixToBackticks){
-				text = text.replace("'", "`");
+				text = text.split("'").join("`")
 			}
 
 			editor.edit((editBuilder) => {

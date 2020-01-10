@@ -60,7 +60,7 @@ function translateSelection(selection, lang) {
             let editor = vscode.window.activeTextEditor;
             //vscode.window.showInformationMessage(text);
             if (fixToBackticks) {
-                text = text.replace("'", "`");
+                text = text.split("'").join("`");
             }
             editor.edit((editBuilder) => {
                 if (appendText) {
